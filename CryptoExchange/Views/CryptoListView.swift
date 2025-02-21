@@ -8,13 +8,13 @@
 import SwiftUI
 
 struct CryptoListView: View {
-    @State private var cryptos: [CoinGeckoCrypto] = []
-    @State private var filteredCryptos: [CoinGeckoCrypto] = []
+    @State private var cryptos: [CryptoCurrency] = []
+    @State private var filteredCryptos: [CryptoCurrency] = []
     @State private var isLoading = true
     @State private var errorMessage: String? = nil
     @State private var searchText = ""
     
-    private let service = CoinGeckoService()
+    private let service = CoinPaprikaService()
     
     var body: some View {
         NavigationStack {
@@ -28,11 +28,12 @@ struct CryptoListView: View {
                 .edgesIgnoringSafeArea(.all)
                 
                 VStack(spacing: 0) {
-                    // Custom Nav Header with Search
+                    // Header with search
                     VStack(spacing: 10) {
                         Text("Cryptocurrencies")
                             .font(.system(size: 24, weight: .bold))
                             .foregroundColor(.white)
+                        
                         HStack {
                             Image(systemName: "magnifyingglass")
                                 .foregroundColor(.gray)
@@ -49,7 +50,6 @@ struct CryptoListView: View {
                     }
                     .padding(.top, 16)
                     
-                    // Main Content
                     if isLoading {
                         Spacer()
                         ProgressView("Loading Cryptocurrencies...")
@@ -68,7 +68,7 @@ struct CryptoListView: View {
                                     NavigationLink(destination: CryptoDetailView(crypto: coin)) {
                                         CryptoRowView(crypto: coin)
                                     }
-                                    .buttonStyle(.plain)
+                                    .buttonStyle(PlainButtonStyle())
                                 }
                             }
                             .padding(.horizontal, 16)
@@ -122,3 +122,4 @@ struct CryptoListView_Previews: PreviewProvider {
         }
     }
 }
+

@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct HomeView: View {
-    @State private var globalStats: CoinGeckoGlobal.GlobalData? = nil
+    @State private var globalData: GlobalStats? = nil
     @State private var isLoadingGlobalStats = true
-    private let service = CoinGeckoService()
+    private let service = CoinPaprikaService()
     
     var body: some View {
         NavigationStack {
@@ -30,7 +30,7 @@ struct HomeView: View {
                             Text("Welcome to")
                                 .font(.headline)
                                 .foregroundColor(.white.opacity(0.8))
-                            Text("Crypto Nexus")
+                            Text("Crypto X")
                                 .font(.system(size: 32, weight: .bold))
                                 .foregroundColor(.white)
                                 .multilineTextAlignment(.center)
@@ -44,16 +44,9 @@ struct HomeView: View {
                             .padding(.horizontal, 30)
                             .multilineTextAlignment(.center)
                         
-                        // Logo
-                        Image("crypto_logo") // Make sure you have this asset
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 150)
-                            .padding(.vertical, 5)
-                        
-                        // Quick Stats
+                        // Quick Stats Card
                         VStack(spacing: 16) {
-                            Text("Quick Stats")
+                            Text("Global Market Stats")
                                 .font(.title2)
                                 .fontWeight(.bold)
                                 .foregroundColor(.primary)
@@ -61,26 +54,25 @@ struct HomeView: View {
                             if isLoadingGlobalStats {
                                 ProgressView("Loading global stats...")
                                     .padding()
-                            } else if let stats = globalStats {
-                                // Using US Dollar values
+                            } else if let data = globalData {
                                 HStack(spacing: 16) {
                                     StatCardView(
                                         title: "Market Cap",
-                                        value: shortScaleFormat(stats.totalMarketCap["usd"] ?? 0)
+                                        value: shortScaleFormat(data.marketCapUsd ?? 0)
                                     )
                                     StatCardView(
                                         title: "24H Volume",
-                                        value: shortScaleFormat(stats.totalVolume["usd"] ?? 0)
+                                        value: shortScaleFormat(data.volume24hUsd ?? 0)
                                     )
                                 }
                                 HStack(spacing: 16) {
                                     StatCardView(
                                         title: "BTC Dominance",
-                                        value: String(format: "%.1f%%", stats.marketCapPercentage["btc"] ?? 0)
+                                        value: String(format: "%.1f%%", data.bitcoinDominancePercentage ?? 0)
                                     )
                                     StatCardView(
                                         title: "Coins",
-                                        value: "\(stats.activeCryptocurrencies)"
+                                        value: "\(data.cryptocurrenciesNumber ?? 0)"
                                     )
                                 }
                             } else {
@@ -93,7 +85,7 @@ struct HomeView: View {
                         .cornerRadius(20)
                         .padding(.horizontal, 20)
                         
-                        // CTA Button
+                        // CTA Button to Explore Markets
                         NavigationLink(destination: CryptoListView()) {
                             Text("Explore Markets")
                                 .font(.headline)
@@ -117,9 +109,7 @@ struct HomeView: View {
             }
             .navigationTitle("")
             .navigationBarTitleDisplayMode(.inline)
-            .onAppear {
-                fetchGlobalStats()
-            }
+            .onAppear { fetchGlobalStats() }
         }
     }
     
@@ -129,11 +119,14 @@ struct HomeView: View {
             DispatchQueue.main.async {
                 switch result {
                 case .success(let global):
-                    self.globalStats = global.data
+                    // NOTE: If your GlobalStats model is top-level,
+                    // you can assign directly. Otherwise, if it has a nested "data" property,
+                    // you'll do something like `self.globalData = global.data`.
+                    self.globalData = global
                 case .failure(let error):
                     print("Error fetching global stats:", error)
                 }
-                self.isLoadingGlobalStats = false
+                isLoadingGlobalStats = false
             }
         }
     }
@@ -156,13 +149,7 @@ struct HomeView: View {
     }
 }
 
-struct HomeView_Previews: PreviewProvider {
-    static var previews: some View {
-        HomeView()
-    }
-}
-
-/// A reusable stat card view.
+/// A reusable view for displaying a stat card.
 struct StatCardView: View {
     let title: String
     let value: String
@@ -180,5 +167,11 @@ struct StatCardView: View {
         .background(Color(.systemBackground))
         .cornerRadius(10)
         .shadow(color: Color.black.opacity(0.1), radius: 3, x: 0, y: 3)
+    }
+}
+
+struct HomeView_Previews: PreviewProvider {
+    static var previews: some View {
+        HomeView()
     }
 }

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ExchangeRowView: View {
-    let exchange: CoinGeckoExchange
+    let exchange: Exchange
     
     var body: some View {
         HStack {
@@ -27,7 +27,7 @@ struct ExchangeRowView: View {
                 }
             }
             Spacer()
-            if let volume = exchange.tradeVolume24hBtc {
+            if let volume = exchange.volume24hUsd {
                 Text("Vol: \(shortFormat(volume))")
                     .font(.subheadline)
                     .foregroundColor(.primary)
@@ -56,21 +56,20 @@ struct ExchangeRowView: View {
         case 1_000...:
             return "\(sign)\(String(format: "%.1f", absValue / 1_000))K"
         default:
-            return "\(sign)\(absValue)"
+            return "\(sign)\(String(format: "%.1f", absValue))"
         }
     }
 }
 
 struct ExchangeRowView_Previews: PreviewProvider {
     static var previews: some View {
-        let sampleExchange = CoinGeckoExchange(
+        let sampleExchange = Exchange(
             id: "binance",
             name: "Binance",
             country: "Cayman Islands",
-            url: "https://www.binance.com",
-            image: nil,
-            trustScoreRank: 1,
-            tradeVolume24hBtc: 350000.12
+            websiteUrl: "https://www.binance.com",
+            logo: nil,
+            volume24hUsd: 3367539450514.66
         )
         
         ZStack {

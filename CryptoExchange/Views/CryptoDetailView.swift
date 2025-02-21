@@ -8,13 +8,13 @@
 import SwiftUI
 
 struct CryptoDetailView: View {
-    let crypto: CoinGeckoCrypto
+    let crypto: CryptoCurrency
     
     @State private var isLoading = true
-    @State private var detail: CoinGeckoDetail? = nil
+    @State private var detail: CoinDetail? = nil
     @State private var errorMessage: String? = nil
     
-    let service = CoinGeckoService()
+    let service = CoinPaprikaService()
     
     var body: some View {
         ZStack {
@@ -36,27 +36,29 @@ struct CryptoDetailView: View {
                     
                     // Info Card
                     VStack(alignment: .leading, spacing: 16) {
-                        if let price = crypto.currentPrice {
-                            DetailRowView(
-                                title: "Current Price",
-                                value: "$\(NumberFormatter.priceFormatter.string(from: NSNumber(value: price)) ?? "N/A")"
-                            )
-                        } else {
-                            DetailRowView(title: "Current Price", placeholder: "N/A")
-                        }
                         
-                        if let change = crypto.priceChangePercentage24h {
+                        if let cadQuote = crypto.quotes["CAD"] {
+                            DetailRowView(title: "Symbol", value: crypto.symbol.uppercased())
+                            
+                            let formattedPrice = NumberFormatter.decimalFormatter
+                                .string(from: NSNumber(value: cadQuote.price)) ?? "N/A"
+                            DetailRowView(title: "Current Price", value: "CA$\(formattedPrice)")
+                            
+                            let change = cadQuote.percentChange24h
                             DetailRowView(
                                 title: "24h Change",
                                 value: "\(String(format: "%.2f", change))%",
                                 valueColor: change >= 0 ? .green : .red
                             )
                         } else {
+                            DetailRowView(title: "Symbol", value: crypto.symbol.uppercased())
+                            DetailRowView(title: "Current Price", placeholder: "N/A")
                             DetailRowView(title: "24h Change", placeholder: "No data")
                         }
                         
                         Divider()
                         
+                        // Detailed coin info from fetchCoinDetail
                         if isLoading {
                             ProgressView("Loading coin details...")
                                 .padding()
@@ -64,7 +66,7 @@ struct CryptoDetailView: View {
                             Text("Error: \(errorMessage)")
                                 .foregroundColor(.red)
                         } else if let detail = detail {
-                            if let desc = detail.description?.en, !desc.isEmpty {
+                            if let desc = detail.description, !desc.isEmpty {
                                 Text("Description")
                                     .font(.headline)
                                 Text(desc)
@@ -96,7 +98,6 @@ struct CryptoDetailView: View {
     }
     
     private func fetchCoinDetail() {
-        print("Fetching detail for ID:", crypto.id)
         service.fetchCoinDetail(for: crypto.id) { result in
             DispatchQueue.main.async {
                 switch result {
@@ -111,7 +112,6 @@ struct CryptoDetailView: View {
     }
 }
 
-/// A reusable row for displaying a key-value pair.
 struct DetailRowView: View {
     let title: String
     var value: String? = nil
@@ -141,18 +141,21 @@ struct DetailRowView: View {
     }
 }
 
+
 struct CryptoDetailView_Previews: PreviewProvider {
     static var previews: some View {
-        let sampleCrypto = CoinGeckoCrypto(
-            id: "btc-bitcoin",
-            symbol: "btc",
-            name: "Bitcoin",
-            image: nil,
-            currentPrice: 98312.29,
+        let sampleQuote = CryptoCurrency.Quote(
+            price: 140197.80,
+            volume24h: 500000000,
             marketCap: 12000000000,
-            totalVolume: 500000000,
-            priceChangePercentage24h: 1.46,
-            marketCapRank: 1
+            percentChange24h: 2.40
+        )
+        let sampleCrypto = CryptoCurrency(
+            id: "btc-bitcoin",
+            name: "Bitcoin",
+            symbol: "BTC",
+            rank: 1,
+            quotes: ["CAD": sampleQuote]
         )
         
         return NavigationStack {
@@ -160,12 +163,3 @@ struct CryptoDetailView_Previews: PreviewProvider {
         }
     }
 }
-extension NumberFormatter {
-    static let priceFormatter: NumberFormatter = {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        formatter.maximumFractionDigits = 2
-        return formatter
-    }()
-}
-

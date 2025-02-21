@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct ExchangeDetailView: View {
-    let exchange: CoinGeckoExchange
-    
+    let exchange: Exchange
+
     var body: some View {
         ZStack {
             // Background Gradient
@@ -31,42 +31,24 @@ struct ExchangeDetailView: View {
                     // Info Card
                     VStack(alignment: .leading, spacing: 16) {
                         // WEBSITE
-                        if let website = exchange.url, !website.isEmpty {
-                            DetailRowView(
-                                title: "Website",
-                                value: website
-                            )
+                        if let website = exchange.websiteUrl, !website.isEmpty {
+                            DetailRowView(title: "Website", value: website)
                         } else {
-                            DetailRowView(
-                                title: "Website",
-                                placeholder: "No website available."
-                            )
+                            DetailRowView(title: "Website", placeholder: "No website available.")
                         }
                         
-                        // 24H VOLUME (using tradeVolume24hBtc)
-                        if let volume = exchange.tradeVolume24hBtc {
-                            DetailRowView(
-                                title: "24h Volume (BTC)",
-                                value: shortFormat(volume)
-                            )
+                        // 24H VOLUME (USD)
+                        if let volume = exchange.volume24hUsd {
+                            DetailRowView(title: "24h Volume (USD)", value: shortFormat(volume))
                         } else {
-                            DetailRowView(
-                                title: "24h Volume (BTC)",
-                                placeholder: "No volume data."
-                            )
+                            DetailRowView(title: "24h Volume (USD)", placeholder: "No volume data.")
                         }
                         
                         // COUNTRY
                         if let country = exchange.country, !country.isEmpty {
-                            DetailRowView(
-                                title: "Country",
-                                value: country
-                            )
+                            DetailRowView(title: "Country", value: country)
                         } else {
-                            DetailRowView(
-                                title: "Country",
-                                placeholder: "No country data."
-                            )
+                            DetailRowView(title: "Country", placeholder: "No country data.")
                         }
                     }
                     .padding()
@@ -83,7 +65,7 @@ struct ExchangeDetailView: View {
         .navigationBarTitleDisplayMode(.inline)
     }
     
-    // Formats large numbers (e.g., 1.2B, 3.4M).
+    // Helper: Formats large numbers (e.g., 1.2B, 3.4M).
     private func shortFormat(_ number: Double) -> String {
         let absValue = abs(number)
         let sign = number < 0 ? "-" : ""
@@ -102,17 +84,15 @@ struct ExchangeDetailView: View {
     }
 }
 
-
 struct ExchangeDetailView_Previews: PreviewProvider {
     static var previews: some View {
-        let sampleExchange = CoinGeckoExchange(
+        let sampleExchange = Exchange(
             id: "binance",
             name: "Binance",
             country: "Cayman Islands",
-            url: "https://www.binance.com",
-            image: nil,
-            trustScoreRank: 1,
-            tradeVolume24hBtc: 350000.12
+            websiteUrl: "https://www.binance.com",
+            logo: nil,
+            volume24hUsd: 3367539450514.66 // example value in USD
         )
         NavigationStack {
             ExchangeDetailView(exchange: sampleExchange)

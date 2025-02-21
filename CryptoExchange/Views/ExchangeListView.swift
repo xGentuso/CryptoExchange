@@ -8,13 +8,13 @@
 import SwiftUI
 
 struct ExchangesListView: View {
-    @State private var exchanges: [CoinGeckoExchange] = []
-    @State private var filteredExchanges: [CoinGeckoExchange] = []
+    @State private var exchanges: [Exchange] = []
+    @State private var filteredExchanges: [Exchange] = []
     @State private var isLoading = true
     @State private var errorMessage: String? = nil
     @State private var searchText = ""
     
-    private let service = CoinGeckoService()
+    private let service = CoinPaprikaService()
     
     var body: some View {
         NavigationStack {
@@ -28,7 +28,7 @@ struct ExchangesListView: View {
                 .edgesIgnoringSafeArea(.all)
                 
                 VStack(spacing: 0) {
-                    // Custom Nav Bar with Search
+                    // Custom Navigation Header with Search
                     VStack(spacing: 10) {
                         Text("Exchanges")
                             .font(.system(size: 24, weight: .bold))
@@ -94,12 +94,12 @@ struct ExchangesListView: View {
             DispatchQueue.main.async {
                 switch result {
                 case .success(let data):
-                    self.exchanges = data
-                    self.filteredExchanges = data
+                    exchanges = data
+                    filteredExchanges = data
                 case .failure(let error):
-                    self.errorMessage = error.localizedDescription
+                    errorMessage = error.localizedDescription
                 }
-                self.isLoading = false
+                isLoading = false
             }
         }
     }

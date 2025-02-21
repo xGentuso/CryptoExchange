@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     init() {
-        // Customize UITabBar appearance to match our theme.
+        
         let appearance = UITabBarAppearance()
         appearance.backgroundColor = UIColor(red: 0.20, green: 0.30, blue: 0.55, alpha: 1.0)
         UITabBar.appearance().standardAppearance = appearance
@@ -34,6 +34,7 @@ struct ContentView: View {
                 Label("Markets", systemImage: "chart.line.uptrend.xyaxis")
             }
             
+            // New Exchanges tab
             NavigationStack {
                 ExchangesListView()
             }
