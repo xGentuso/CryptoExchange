@@ -8,13 +8,13 @@
 import SwiftUI
 
 struct CryptoDetailView: View {
-    let crypto: CryptoCurrency
+    let crypto: CoinGeckoCrypto
     
     @State private var isLoading = true
-    @State private var detail: CoinDetail? = nil
+    @State private var detail: CoinGeckoDetail? = nil
     @State private var errorMessage: String? = nil
     
-    let service = CryptoService()
+    let service = CoinGeckoService()
     
     var body: some View {
         ZStack {
@@ -28,46 +28,35 @@ struct CryptoDetailView: View {
             
             ScrollView {
                 VStack(spacing: 20) {
-                    // MARK: - Header
+                    // Header
                     Text(crypto.name)
                         .font(.system(size: 32, weight: .bold))
                         .foregroundColor(.white)
                         .padding(.top, 40)
                     
-                    // MARK: - Info Card
+                    // Info Card
                     VStack(alignment: .leading, spacing: 16) {
-                        
-                        // Basic coin info from ticker data
-                        if let usdQuote = crypto.quotes["USD"] {
-                            DetailRowView(
-                                title: "Symbol",
-                                value: crypto.symbol.uppercased()
-                            )
-                            
-                            // Use our non-private priceFormatter
-                            let formattedPrice = NumberFormatter.priceFormatter.string(
-                                from: NSNumber(value: usdQuote.price)
-                            ) ?? "N/A"
-                            
+                        if let price = crypto.currentPrice {
                             DetailRowView(
                                 title: "Current Price",
-                                value: "$\(formattedPrice)"
-                            )
-                            
-                            DetailRowView(
-                                title: "24h Change",
-                                value: "\(String(format: "%.2f", usdQuote.percentChange24h))%",
-                                valueColor: usdQuote.percentChange24h >= 0 ? .green : .red
+                                value: "$\(NumberFormatter.priceFormatter.string(from: NSNumber(value: price)) ?? "N/A")"
                             )
                         } else {
-                            DetailRowView(title: "Symbol", value: crypto.symbol.uppercased())
                             DetailRowView(title: "Current Price", placeholder: "N/A")
+                        }
+                        
+                        if let change = crypto.priceChangePercentage24h {
+                            DetailRowView(
+                                title: "24h Change",
+                                value: "\(String(format: "%.2f", change))%",
+                                valueColor: change >= 0 ? .green : .red
+                            )
+                        } else {
                             DetailRowView(title: "24h Change", placeholder: "No data")
                         }
                         
                         Divider()
                         
-                        // Detailed coin info from API call
                         if isLoading {
                             ProgressView("Loading coin details...")
                                 .padding()
@@ -75,7 +64,7 @@ struct CryptoDetailView: View {
                             Text("Error: \(errorMessage)")
                                 .foregroundColor(.red)
                         } else if let detail = detail {
-                            if let desc = detail.description, !desc.isEmpty {
+                            if let desc = detail.description?.en, !desc.isEmpty {
                                 Text("Description")
                                     .font(.headline)
                                 Text(desc)
@@ -152,7 +141,25 @@ struct DetailRowView: View {
     }
 }
 
-// MARK: - Public (internal) extension for Price Formatter
+struct CryptoDetailView_Previews: PreviewProvider {
+    static var previews: some View {
+        let sampleCrypto = CoinGeckoCrypto(
+            id: "btc-bitcoin",
+            symbol: "btc",
+            name: "Bitcoin",
+            image: nil,
+            currentPrice: 98312.29,
+            marketCap: 12000000000,
+            totalVolume: 500000000,
+            priceChangePercentage24h: 1.46,
+            marketCapRank: 1
+        )
+        
+        return NavigationStack {
+            CryptoDetailView(crypto: sampleCrypto)
+        }
+    }
+}
 extension NumberFormatter {
     static let priceFormatter: NumberFormatter = {
         let formatter = NumberFormatter()
@@ -162,22 +169,3 @@ extension NumberFormatter {
     }()
 }
 
-struct CryptoDetailView_Previews: PreviewProvider {
-    static var previews: some View {
-        // B) Provide currentPrice, percentChange24h, etc.
-        let sampleCrypto = CryptoCurrency(
-            id: "btc-bitcoin",
-            name: "Bitcoin",
-            symbol: "BTC",
-            rank: nil,
-            currentPrice: 98312.29,
-            percentChange24h: 1.46,
-            volume24h: 500_000_000,
-            marketCap: 12_000_000_000
-        )
-
-        return NavigationStack {
-            CryptoDetailView(crypto: sampleCrypto)
-        }
-    }
-}

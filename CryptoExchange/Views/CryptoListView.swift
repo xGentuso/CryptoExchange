@@ -8,13 +8,13 @@
 import SwiftUI
 
 struct CryptoListView: View {
-    @State private var cryptos: [CryptoCurrency] = []
-    @State private var filteredCryptos: [CryptoCurrency] = []
+    @State private var cryptos: [CoinGeckoCrypto] = []
+    @State private var filteredCryptos: [CoinGeckoCrypto] = []
     @State private var isLoading = true
     @State private var errorMessage: String? = nil
     @State private var searchText = ""
     
-    private let cryptoService = CryptoService()
+    private let service = CoinGeckoService()
     
     var body: some View {
         NavigationStack {
@@ -28,12 +28,11 @@ struct CryptoListView: View {
                 .edgesIgnoringSafeArea(.all)
                 
                 VStack(spacing: 0) {
-                    // Custom Navigation Header with Search
+                    // Custom Nav Header with Search
                     VStack(spacing: 10) {
                         Text("Cryptocurrencies")
                             .font(.system(size: 24, weight: .bold))
                             .foregroundColor(.white)
-                        
                         HStack {
                             Image(systemName: "magnifyingglass")
                                 .foregroundColor(.gray)
@@ -90,16 +89,16 @@ struct CryptoListView: View {
     private func fetchCryptos() {
         isLoading = true
         errorMessage = nil
-        cryptoService.fetchCryptos { result in
+        service.fetchCryptos { result in
             DispatchQueue.main.async {
                 switch result {
                 case .success(let data):
-                    cryptos = data
-                    filteredCryptos = data
+                    self.cryptos = data
+                    self.filteredCryptos = data
                 case .failure(let error):
-                    errorMessage = error.localizedDescription
+                    self.errorMessage = error.localizedDescription
                 }
-                isLoading = false
+                self.isLoading = false
             }
         }
     }

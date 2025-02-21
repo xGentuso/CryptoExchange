@@ -8,18 +8,18 @@
 import SwiftUI
 
 struct ExchangesListView: View {
-    @State private var exchanges: [Exchange] = []
-    @State private var filteredExchanges: [Exchange] = []
+    @State private var exchanges: [CoinGeckoExchange] = []
+    @State private var filteredExchanges: [CoinGeckoExchange] = []
     @State private var isLoading = true
     @State private var errorMessage: String? = nil
     @State private var searchText = ""
     
-    private let cryptoService = CryptoService()
+    private let service = CoinGeckoService()
     
     var body: some View {
         NavigationStack {
             ZStack {
-                // MARK: - Background Gradient
+                // Background Gradient
                 LinearGradient(
                     gradient: Gradient(colors: [Color.blue, Color.purple]),
                     startPoint: .topLeading,
@@ -28,17 +28,15 @@ struct ExchangesListView: View {
                 .edgesIgnoringSafeArea(.all)
                 
                 VStack(spacing: 0) {
-                    // MARK: - Custom Nav Bar
+                    // Custom Nav Bar with Search
                     VStack(spacing: 10) {
                         Text("Exchanges")
                             .font(.system(size: 24, weight: .bold))
                             .foregroundColor(.white)
                         
-                        // Search Bar
                         HStack {
                             Image(systemName: "magnifyingglass")
                                 .foregroundColor(.gray)
-                            
                             TextField("Search Exchanges", text: $searchText)
                                 .textFieldStyle(PlainTextFieldStyle())
                                 .onChange(of: searchText) { _ in
@@ -52,11 +50,10 @@ struct ExchangesListView: View {
                     }
                     .padding(.top, 16)
                     
-                    // MARK: - Main Content
+                    // Main Content
                     if isLoading {
                         Spacer()
                         ProgressView("Loading Exchanges...")
-                            .padding()
                             .foregroundColor(.white)
                         Spacer()
                     } else if let errorMessage = errorMessage {
@@ -66,7 +63,6 @@ struct ExchangesListView: View {
                             .padding()
                         Spacer()
                     } else {
-                        // Scrollable list of exchanges
                         ScrollView {
                             LazyVStack(spacing: 12) {
                                 ForEach(filteredExchanges, id: \.id) { exchange in
@@ -81,6 +77,7 @@ struct ExchangesListView: View {
                             .padding(.bottom, 8)
                         }
                     }
+                    Spacer()
                 }
             }
             .navigationBarHidden(true)
@@ -93,7 +90,7 @@ struct ExchangesListView: View {
     private func fetchExchanges() {
         isLoading = true
         errorMessage = nil
-        cryptoService.fetchExchanges { result in
+        service.fetchExchanges { result in
             DispatchQueue.main.async {
                 switch result {
                 case .success(let data):
@@ -113,7 +110,7 @@ struct ExchangesListView: View {
         } else {
             filteredExchanges = exchanges.filter { exchange in
                 exchange.name.lowercased().contains(searchText.lowercased()) ||
-                (exchange.countries?.joined(separator: " ").lowercased().contains(searchText.lowercased()) ?? false)
+                (exchange.country?.lowercased().contains(searchText.lowercased()) ?? false)
             }
         }
     }

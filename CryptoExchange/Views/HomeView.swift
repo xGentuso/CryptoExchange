@@ -8,14 +8,14 @@
 import SwiftUI
 
 struct HomeView: View {
-    @State private var globalStats: GlobalStats? = nil
+    @State private var globalStats: CoinGeckoGlobal.GlobalData? = nil
     @State private var isLoadingGlobalStats = true
-    private let cryptoService = CryptoService()
+    private let service = CoinGeckoService()
     
     var body: some View {
         NavigationStack {
             ZStack {
-                // MARK: - Background Gradient
+                // Background Gradient
                 LinearGradient(
                     gradient: Gradient(colors: [Color.blue, Color.purple]),
                     startPoint: .topLeading,
@@ -25,7 +25,7 @@ struct HomeView: View {
                 
                 ScrollView {
                     VStack(spacing: 24) {
-                        // MARK: - Header
+                        // Header
                         VStack(spacing: 8) {
                             Text("Welcome to")
                                 .font(.headline)
@@ -37,21 +37,21 @@ struct HomeView: View {
                         }
                         .padding(.top, 40)
                         
-                        // MARK: - Subtitle
+                        // Subtitle
                         Text("Track and learn about your favorite cryptocurrencies.")
                             .font(.body)
                             .foregroundColor(.white.opacity(0.9))
                             .padding(.horizontal, 30)
                             .multilineTextAlignment(.center)
                         
-                        // MARK: - Logo
-                        Image("crypto_logo") // Replace with your asset name
+                        // Logo
+                        Image("crypto_logo") // Make sure you have this asset
                             .resizable()
                             .scaledToFit()
                             .frame(width: 150)
                             .padding(.vertical, 5)
                         
-                        // MARK: - Quick Stats
+                        // Quick Stats
                         VStack(spacing: 16) {
                             Text("Quick Stats")
                                 .font(.title2)
@@ -62,24 +62,25 @@ struct HomeView: View {
                                 ProgressView("Loading global stats...")
                                     .padding()
                             } else if let stats = globalStats {
+                                // Using US Dollar values
                                 HStack(spacing: 16) {
                                     StatCardView(
                                         title: "Market Cap",
-                                        value: shortScaleFormat(stats.marketCapUsd)
+                                        value: shortScaleFormat(stats.totalMarketCap["usd"] ?? 0)
                                     )
                                     StatCardView(
                                         title: "24H Volume",
-                                        value: shortScaleFormat(stats.volume24hUsd)
+                                        value: shortScaleFormat(stats.totalVolume["usd"] ?? 0)
                                     )
                                 }
                                 HStack(spacing: 16) {
                                     StatCardView(
                                         title: "BTC Dominance",
-                                        value: String(format: "%.1f%%", stats.bitcoinDominancePercentage)
+                                        value: String(format: "%.1f%%", stats.marketCapPercentage["btc"] ?? 0)
                                     )
                                     StatCardView(
                                         title: "Coins",
-                                        value: "\(stats.cryptocurrenciesNumber)"
+                                        value: "\(stats.activeCryptocurrencies)"
                                     )
                                 }
                             } else {
@@ -92,7 +93,7 @@ struct HomeView: View {
                         .cornerRadius(20)
                         .padding(.horizontal, 20)
                         
-                        // MARK: - CTA Button
+                        // CTA Button
                         NavigationLink(destination: CryptoListView()) {
                             Text("Explore Markets")
                                 .font(.headline)
@@ -109,7 +110,7 @@ struct HomeView: View {
                                 .cornerRadius(12)
                         }
                         .padding(.horizontal, 20)
-                        .padding(.bottom, 20) // Adjust if you need more/less space
+                        .padding(.bottom, 20)
                     }
                     .padding(.top, 20)
                 }
@@ -122,14 +123,13 @@ struct HomeView: View {
         }
     }
     
-    // MARK: - Fetch Global Stats
     private func fetchGlobalStats() {
         isLoadingGlobalStats = true
-        cryptoService.fetchGlobalStats { result in
+        service.fetchGlobalStats { result in
             DispatchQueue.main.async {
                 switch result {
-                case .success(let stats):
-                    self.globalStats = stats
+                case .success(let global):
+                    self.globalStats = global.data
                 case .failure(let error):
                     print("Error fetching global stats:", error)
                 }
@@ -138,12 +138,9 @@ struct HomeView: View {
         }
     }
     
-    // MARK: - Short Scale Number Formatting
-    /// Converts large numbers into short scale strings like "3.3T", "2.1B", "5.6M", etc.
     private func shortScaleFormat(_ value: Double) -> String {
         let absValue = abs(value)
         let sign = value < 0 ? "-" : ""
-        
         switch absValue {
         case 1_000_000_000_000...:
             return "\(sign)\(String(format: "%.1f", absValue / 1_000_000_000_000))T"
@@ -165,7 +162,7 @@ struct HomeView_Previews: PreviewProvider {
     }
 }
 
-/// A reusable view for displaying a stat card.
+/// A reusable stat card view.
 struct StatCardView: View {
     let title: String
     let value: String

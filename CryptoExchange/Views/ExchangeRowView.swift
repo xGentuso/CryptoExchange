@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ExchangeRowView: View {
-    let exchange: Exchange
+    let exchange: CoinGeckoExchange
     
     var body: some View {
         HStack {
@@ -16,8 +16,8 @@ struct ExchangeRowView: View {
                 Text(exchange.name)
                     .font(.headline)
                     .foregroundColor(.primary)
-                if let countries = exchange.countries, !countries.isEmpty {
-                    Text(countries.joined(separator: ", "))
+                if let country = exchange.country, !country.isEmpty {
+                    Text(country)
                         .font(.caption)
                         .foregroundColor(.secondary)
                 } else {
@@ -27,7 +27,7 @@ struct ExchangeRowView: View {
                 }
             }
             Spacer()
-            if let volume = exchange.volume24h {
+            if let volume = exchange.tradeVolume24hBtc {
                 Text("Vol: \(shortFormat(volume))")
                     .font(.subheadline)
                     .foregroundColor(.primary)
@@ -43,7 +43,6 @@ struct ExchangeRowView: View {
         .shadow(color: Color.black.opacity(0.15), radius: 4, x: 0, y: 2)
     }
     
-    /// Formats large numbers (e.g., 1.2B, 3.4M).
     private func shortFormat(_ number: Double) -> String {
         let absValue = abs(number)
         let sign = number < 0 ? "-" : ""
@@ -64,13 +63,14 @@ struct ExchangeRowView: View {
 
 struct ExchangeRowView_Previews: PreviewProvider {
     static var previews: some View {
-        let sampleExchange = Exchange(
+        let sampleExchange = CoinGeckoExchange(
             id: "binance",
             name: "Binance",
-            websiteURL: "https://www.binance.com",
-            volume24h: 1234567890,
-            volume24hChange: 5.2,
-            countries: ["Cayman Islands", "Malta"]
+            country: "Cayman Islands",
+            url: "https://www.binance.com",
+            image: nil,
+            trustScoreRank: 1,
+            tradeVolume24hBtc: 350000.12
         )
         
         ZStack {
@@ -87,3 +87,4 @@ struct ExchangeRowView_Previews: PreviewProvider {
         .previewLayout(.sizeThatFits)
     }
 }
+

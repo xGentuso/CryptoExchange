@@ -8,22 +8,18 @@
 import SwiftUI
 
 struct CryptoRowView: View {
-    let crypto: CryptoCurrency
+    let crypto: CoinGeckoCrypto
     
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            // Header: Coin Name and Current Price
+            // Top row: Coin Name & Current Price
             HStack {
                 Text(crypto.name)
                     .font(.headline)
                     .foregroundColor(.primary)
-                
                 Spacer()
-                
-                if let usdQuote = crypto.quotes["USD"] {
-                    // Format price with commas (e.g., 98,312.29)
-                    let formattedPrice = NumberFormatter.priceFormatter.string(from: NSNumber(value: usdQuote.price)) ?? "N/A"
-                    
+                if let price = crypto.currentPrice {
+                    let formattedPrice = NumberFormatter.priceFormatter.string(from: NSNumber(value: price)) ?? "N/A"
                     Text("$\(formattedPrice)")
                         .font(.headline)
                         .foregroundColor(.primary)
@@ -33,17 +29,13 @@ struct CryptoRowView: View {
                         .foregroundColor(.secondary)
                 }
             }
-            
-            // Footer: Symbol and 24h Change
+            // Bottom row: Symbol & 24h Change
             HStack {
                 Text(crypto.symbol.uppercased())
                     .font(.caption)
                     .foregroundColor(.secondary)
-                
                 Spacer()
-                
-                if let usdQuote = crypto.quotes["USD"] {
-                    let change = usdQuote.percentChange24h
+                if let change = crypto.priceChangePercentage24h {
                     Text("\(String(format: "%.2f", change))%")
                         .font(.subheadline)
                         .foregroundColor(change >= 0 ? .green : .red)
@@ -61,29 +53,19 @@ struct CryptoRowView: View {
     }
 }
 
-
-
 struct CryptoRowView_Previews: PreviewProvider {
     static var previews: some View {
-        // We assume your CryptoCurrency.Quote is something like:
-        // struct Quote {
-        //    let price: Double
-        //    let volume24h: Double
-        //    let marketCap: Double
-        //    let percentChange24h: Double
-        // }
-        
-        let sampleCrypto = CryptoCurrency(
-            id: "btc-bitcoin",
+        let sampleCrypto = CoinGeckoCrypto(
+            id: "btc",
+            symbol: "btc",
             name: "Bitcoin",
-            symbol: "BTC",
+            image: nil,
             currentPrice: 98312.29,
-            percentChange24h: 1.46,
-            volume24h: 500_000_000,
-            marketCap: 12_000_000_000
+            marketCap: 12000000000,
+            totalVolume: 500000000,
+            priceChangePercentage24h: 1.46,
+            marketCapRank: 1
         )
-
-        
         ZStack {
             LinearGradient(
                 gradient: Gradient(colors: [Color.blue, Color.purple]),
