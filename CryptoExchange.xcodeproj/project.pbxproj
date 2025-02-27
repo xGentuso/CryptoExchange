@@ -6,19 +6,99 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		8C0D9F0F2D70B08A00808AC0 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C0D9F0E2D70B08A00808AC0 /* WidgetKit.framework */; };
+		8C0D9F112D70B08A00808AC0 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C0D9F102D70B08A00808AC0 /* SwiftUI.framework */; };
+		8C0D9F1C2D70B08B00808AC0 /* CryptoExchangeWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 8C0D9F0C2D70B08A00808AC0 /* CryptoExchangeWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		8C0D9F1A2D70B08B00808AC0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8C7C60432D68289700E47775 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8C0D9F0B2D70B08A00808AC0;
+			remoteInfo = CryptoExchangeWidgetExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		8C0D9F212D70B08B00808AC0 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				8C0D9F1C2D70B08B00808AC0 /* CryptoExchangeWidgetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		8C0D9F0C2D70B08A00808AC0 /* CryptoExchangeWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = CryptoExchangeWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		8C0D9F0E2D70B08A00808AC0 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		8C0D9F102D70B08A00808AC0 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		8C0D9F222D70B09500808AC0 /* CryptoExchangeWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CryptoExchangeWidgetExtension.entitlements; sourceTree = "<group>"; };
 		8C7C604B2D68289700E47775 /* CryptoExchange.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CryptoExchange.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		8C0D9F1D2D70B08B00808AC0 /* Exceptions for "CryptoExchangeWidget" folder in "CryptoExchangeWidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 8C0D9F0B2D70B08A00808AC0 /* CryptoExchangeWidgetExtension */;
+		};
+		8C0D9F242D70B19200808AC0 /* Exceptions for "CryptoExchange" folder in "CryptoExchangeWidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Models/CoinDetail.swift,
+				Models/CryptoCurrency.swift,
+				Models/Exchange.swift,
+				Models/GlobalStats.swift,
+				Models/PortfolioManager.swift,
+				"NumberFormatter+Extensions.swift",
+				Services/CoinPaprikaService.swift,
+				Views/CryptoDetailView.swift,
+				Views/CryptoListView.swift,
+				Views/CryptoRowView.swift,
+			);
+			target = 8C0D9F0B2D70B08A00808AC0 /* CryptoExchangeWidgetExtension */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		8C0D9F122D70B08A00808AC0 /* CryptoExchangeWidget */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				8C0D9F1D2D70B08B00808AC0 /* Exceptions for "CryptoExchangeWidget" folder in "CryptoExchangeWidgetExtension" target */,
+			);
+			path = CryptoExchangeWidget;
+			sourceTree = "<group>";
+		};
 		8C7C604D2D68289700E47775 /* CryptoExchange */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				8C0D9F242D70B19200808AC0 /* Exceptions for "CryptoExchange" folder in "CryptoExchangeWidgetExtension" target */,
+			);
 			path = CryptoExchange;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		8C0D9F092D70B08A00808AC0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8C0D9F112D70B08A00808AC0 /* SwiftUI.framework in Frameworks */,
+				8C0D9F0F2D70B08A00808AC0 /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8C7C60482D68289700E47775 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -29,10 +109,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8C0D9F0D2D70B08A00808AC0 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				8C0D9F0E2D70B08A00808AC0 /* WidgetKit.framework */,
+				8C0D9F102D70B08A00808AC0 /* SwiftUI.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		8C7C60422D68289700E47775 = {
 			isa = PBXGroup;
 			children = (
+				8C0D9F222D70B09500808AC0 /* CryptoExchangeWidgetExtension.entitlements */,
 				8C7C604D2D68289700E47775 /* CryptoExchange */,
+				8C0D9F122D70B08A00808AC0 /* CryptoExchangeWidget */,
+				8C0D9F0D2D70B08A00808AC0 /* Frameworks */,
 				8C7C604C2D68289700E47775 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -41,6 +133,7 @@
 			isa = PBXGroup;
 			children = (
 				8C7C604B2D68289700E47775 /* CryptoExchange.app */,
+				8C0D9F0C2D70B08A00808AC0 /* CryptoExchangeWidgetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -48,6 +141,28 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		8C0D9F0B2D70B08A00808AC0 /* CryptoExchangeWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8C0D9F1E2D70B08B00808AC0 /* Build configuration list for PBXNativeTarget "CryptoExchangeWidgetExtension" */;
+			buildPhases = (
+				8C0D9F082D70B08A00808AC0 /* Sources */,
+				8C0D9F092D70B08A00808AC0 /* Frameworks */,
+				8C0D9F0A2D70B08A00808AC0 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				8C0D9F122D70B08A00808AC0 /* CryptoExchangeWidget */,
+			);
+			name = CryptoExchangeWidgetExtension;
+			packageProductDependencies = (
+			);
+			productName = CryptoExchangeWidgetExtension;
+			productReference = 8C0D9F0C2D70B08A00808AC0 /* CryptoExchangeWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		8C7C604A2D68289700E47775 /* CryptoExchange */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 8C7C60592D68289800E47775 /* Build configuration list for PBXNativeTarget "CryptoExchange" */;
@@ -55,10 +170,12 @@
 				8C7C60472D68289700E47775 /* Sources */,
 				8C7C60482D68289700E47775 /* Frameworks */,
 				8C7C60492D68289700E47775 /* Resources */,
+				8C0D9F212D70B08B00808AC0 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				8C0D9F1B2D70B08B00808AC0 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				8C7C604D2D68289700E47775 /* CryptoExchange */,
@@ -80,6 +197,9 @@
 				LastSwiftUpdateCheck = 1620;
 				LastUpgradeCheck = 1620;
 				TargetAttributes = {
+					8C0D9F0B2D70B08A00808AC0 = {
+						CreatedOnToolsVersion = 16.2;
+					};
 					8C7C604A2D68289700E47775 = {
 						CreatedOnToolsVersion = 16.2;
 					};
@@ -100,11 +220,19 @@
 			projectRoot = "";
 			targets = (
 				8C7C604A2D68289700E47775 /* CryptoExchange */,
+				8C0D9F0B2D70B08A00808AC0 /* CryptoExchangeWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		8C0D9F0A2D70B08A00808AC0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8C7C60492D68289700E47775 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -115,6 +243,13 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		8C0D9F082D70B08A00808AC0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8C7C60472D68289700E47775 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -124,7 +259,71 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		8C0D9F1B2D70B08B00808AC0 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8C0D9F0B2D70B08A00808AC0 /* CryptoExchangeWidgetExtension */;
+			targetProxy = 8C0D9F1A2D70B08B00808AC0 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		8C0D9F1F2D70B08B00808AC0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = CryptoExchangeWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = LN2HJ678YH;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = CryptoExchangeWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = CryptoExchangeWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.triosRM.CryptoExchange.CryptoExchangeWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		8C0D9F202D70B08B00808AC0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = CryptoExchangeWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = LN2HJ678YH;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = CryptoExchangeWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = CryptoExchangeWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.triosRM.CryptoExchange.CryptoExchangeWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		8C7C60572D68289800E47775 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -249,6 +448,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = CryptoExchange/CryptoExchange.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"CryptoExchange/Preview Content\"";
@@ -278,6 +478,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = CryptoExchange/CryptoExchange.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"CryptoExchange/Preview Content\"";
@@ -305,6 +506,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		8C0D9F1E2D70B08B00808AC0 /* Build configuration list for PBXNativeTarget "CryptoExchangeWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8C0D9F1F2D70B08B00808AC0 /* Debug */,
+				8C0D9F202D70B08B00808AC0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		8C7C60462D68289700E47775 /* Build configuration list for PBXProject "CryptoExchange" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import WidgetKit
 
 struct CryptoListView: View {
     @State private var cryptos: [CryptoCurrency] = []
@@ -95,6 +96,7 @@ struct CryptoListView: View {
                 case .success(let data):
                     self.cryptos = data
                     self.filteredCryptos = data
+                    WidgetCenter.shared.reloadTimelines(ofKind: "CryptoExchangeWidget")
                 case .failure(let error):
                     self.errorMessage = error.localizedDescription
                 }
@@ -122,4 +124,3 @@ struct CryptoListView_Previews: PreviewProvider {
         }
     }
 }
-

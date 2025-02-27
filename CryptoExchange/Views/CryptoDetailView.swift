@@ -28,7 +28,7 @@ struct CryptoDetailView: View {
             
             ScrollView {
                 VStack(spacing: 20) {
-                    // Header
+                    // Header: Coin Name
                     Text(crypto.name)
                         .font(.system(size: 32, weight: .bold))
                         .foregroundColor(.white)
@@ -36,19 +36,17 @@ struct CryptoDetailView: View {
                     
                     // Info Card
                     VStack(alignment: .leading, spacing: 16) {
-                        
+                        // Symbol & Price
                         if let cadQuote = crypto.quotes["CAD"] {
                             DetailRowView(title: "Symbol", value: crypto.symbol.uppercased())
-                            
-                            let formattedPrice = NumberFormatter.decimalFormatter
-                                .string(from: NSNumber(value: cadQuote.price)) ?? "N/A"
-                            DetailRowView(title: "Current Price", value: "CA$\(formattedPrice)")
-                            
-                            let change = cadQuote.percentChange24h
+                            DetailRowView(
+                                title: "Current Price",
+                                value: "CA$" + String(format: "%.2f", cadQuote.price)
+                            )
                             DetailRowView(
                                 title: "24h Change",
-                                value: "\(String(format: "%.2f", change))%",
-                                valueColor: change >= 0 ? .green : .red
+                                value: String(format: "%.2f%%", cadQuote.percentChange24h),
+                                valueColor: cadQuote.percentChange24h >= 0 ? .green : .red
                             )
                         } else {
                             DetailRowView(title: "Symbol", value: crypto.symbol.uppercased())
@@ -58,7 +56,7 @@ struct CryptoDetailView: View {
                         
                         Divider()
                         
-                        // Detailed coin info from fetchCoinDetail
+                        // Detailed coin info from CoinPaprika detail endpoint
                         if isLoading {
                             ProgressView("Loading coin details...")
                                 .padding()
@@ -112,6 +110,7 @@ struct CryptoDetailView: View {
     }
 }
 
+/// A reusable row for displaying a key-value pair.
 struct DetailRowView: View {
     let title: String
     var value: String? = nil
@@ -141,11 +140,10 @@ struct DetailRowView: View {
     }
 }
 
-
 struct CryptoDetailView_Previews: PreviewProvider {
     static var previews: some View {
         let sampleQuote = CryptoCurrency.Quote(
-            price: 140197.80,
+            price: 99378.80,
             volume24h: 500000000,
             marketCap: 12000000000,
             percentChange24h: 2.40

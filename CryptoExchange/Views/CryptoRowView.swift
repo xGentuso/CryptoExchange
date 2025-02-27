@@ -25,22 +25,18 @@ struct CryptoRowView: View {
                         .foregroundColor(.secondary)
                 }
                 Spacer()
+                
+                // Display CAD price with SwiftUI's built-in specifier
                 if let cadQuote = crypto.quotes["CAD"] {
-                    if let formattedPrice = NumberFormatter.decimalFormatter
-                        .string(from: NSNumber(value: cadQuote.price)) {
-                        Text("CA$\(formattedPrice)")
-                            .font(.headline)
-                    } else {
-                        Text("N/A")
-                            .font(.headline)
-                            .foregroundColor(.secondary)
-                    }
+                    Text("CA$\(cadQuote.price, specifier: "%.2f")")
+                        .font(.headline)
                 } else {
                     Text("N/A")
                         .font(.headline)
                         .foregroundColor(.secondary)
                 }
-                // Plus button to add to portfolio
+                
+                // Plus button to add to portfolio (if needed)
                 Button {
                     showAddSheet = true
                 } label: {
@@ -50,10 +46,9 @@ struct CryptoRowView: View {
                 }
                 .buttonStyle(BorderlessButtonStyle())
                 .padding(.leading, 8)
-                // Redesigned sheet
                 .sheet(isPresented: $showAddSheet) {
+                    // Minimal add sheet example
                     ZStack {
-                        // Gradient background
                         LinearGradient(
                             gradient: Gradient(colors: [Color.blue, Color.purple]),
                             startPoint: .topLeading,
@@ -61,56 +56,38 @@ struct CryptoRowView: View {
                         )
                         .edgesIgnoringSafeArea(.all)
                         
-                        VStack(spacing: 24) {
-                            // Header
+                        VStack(spacing: 20) {
                             Text("Add \(crypto.name) to Portfolio")
-                                .font(.title2)
-                                .fontWeight(.semibold)
-                                .foregroundColor(.white)
-                                .padding(.top, 40)
+                                .font(.headline)
                             
-                            // Frosted card
-                            VStack(spacing: 16) {
-                                TextField("Enter amount", text: $amountText)
-                                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                                    .keyboardType(.decimalPad)
-                                    .padding(.horizontal)
-                                    .padding(.top, 16)
-                                
-                                Button {
-                                    if let amount = Double(amountText) {
-                                        portfolioManager.addItem(coin: crypto, amount: amount)
-                                    }
-                                    amountText = ""
-                                    showAddSheet = false
-                                } label: {
-                                    Text("Add")
-                                        .font(.headline)
-                                        .foregroundColor(.white)
-                                        .padding()
-                                        .frame(maxWidth: .infinity)
-                                        .background(
-                                            LinearGradient(
-                                                gradient: Gradient(colors: [Color.blue, Color.purple]),
-                                                startPoint: .leading,
-                                                endPoint: .trailing
-                                            )
-                                        )
-                                        .cornerRadius(10)
+                            TextField("Enter amount", text: $amountText)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                                .keyboardType(.decimalPad)
+                                .padding()
+                            
+                            Button("Add") {
+                                if let amount = Double(amountText) {
+                                    portfolioManager.addItem(coin: crypto, amount: amount)
                                 }
-                                .padding([.horizontal, .bottom], 16)
+                                amountText = ""
+                                showAddSheet = false
                             }
-                            .background(.regularMaterial)
-                            .cornerRadius(16)
-                            .shadow(color: Color.black.opacity(0.2), radius: 8, x: 0, y: 4)
-                            .padding(.horizontal, 20)
+                            .padding()
+                            .background(Color.blue)
+                            .foregroundColor(.white)
+                            .cornerRadius(8)
                             
                             Spacer()
                         }
+                        .padding()
+                        .background(.regularMaterial)
+                        .cornerRadius(16)
+                        .shadow(color: Color.black.opacity(0.2), radius: 8, x: 0, y: 4)
+                        .padding(.horizontal, 20)
                     }
                 }
             }
-            // 24h change row
+            // 24h change
             if let cadQuote = crypto.quotes["CAD"] {
                 let change = cadQuote.percentChange24h
                 Text("\(String(format: "%.2f", change))%")
